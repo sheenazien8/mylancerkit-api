@@ -6,7 +6,14 @@
     "type": "project",
     "require": {
         "php": ">=7.1.3",
-        "laravel/lumen-framework": "5.8.*"
+        "guzzlehttp/guzzle": "^6.2",
+        "illuminate/mail": "^5.8",
+        "illuminate/notifications": "^5.5",
+        "illuminate/support": "^5.5",
+        "laravel/lumen-framework": "5.8.*",
+        "nesbot/carbon": "1.36.2",
+        "ramsey/uuid": "^3.8",
+        "tymon/jwt-auth": "^1.0@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
