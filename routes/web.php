@@ -79,8 +79,16 @@ $router->group(['middleware' => 'auth:api', 'cors'], function($router)
 
     $router->group(['prefix' => 'project'], function () use ($router)
     {
+        $router->get('/trash', [
+            'uses' => 'ProjectController@trash'
+        ]);
+
         $router->get('/search', [
             'uses' => 'ProjectController@search'
+        ]);
+
+        $router->get('/trash/search', [
+            'uses' => 'ProjectController@trashSearch'
         ]);
 
         $router->put('/{project}/update', [

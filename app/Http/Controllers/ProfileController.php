@@ -4,17 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
     public function index($user)
     {
-        $user = User::find($user);
+        $user = User::with(['projects' => function ($query)
+            {
+                $query->whereHas('projectStatus', function ($q)
+                {
+                    return $q->where('name', '!=', 'TRASH');
+                });
+            }])->find($user);
 
         return response()->json([
             'status' => 'success',
-            'user' => $user->load('profile')
+            'user' => $user->load('profile', 'clients')
         ], 200);
     }
 

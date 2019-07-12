@@ -16,8 +16,12 @@ class ProjectController extends Controller
 {
     public function index($client)
     {
-        $projects = Project::with('client', 'projectStatus', 'paymentMethod', 'paymentStatus')
+        $projects = Project::with('client', 'projectStatus', 'paymentMethod', 'paymentStatus', 'payments')
                         ->where('client_id', $client)
+                        ->whereHas('projectStatus', function ($query)
+                        {
+                            return $query->where('name', '!=', 'TRASH');
+                        })
                         ->where('user_id', app('auth')->id())->latest()->paginate(10);
 
         return response()->json([
@@ -116,15 +120,31 @@ class ProjectController extends Controller
     public function search(Request $request)
     {
         $projects = Project::with('client', 'paymentStatus', 'paymentMethod', 'projectStatus')
-                    ->where('user_id', app('auth')->id())
-                    ->where('title', 'LIKE', "%%".$request->input('q')."%%")
-                    ->paginate(10);
+                        ->when($request->input('client_id'), function ($query) use ($request)
+                        {
+                            return $query->where('client_id', $request->input('client_id'));
+                        })
+                        ->where('user_id', app('auth')->id())
+                        ->whereHas('projectStatus', function ($query)
+                        {
+                            return $query->where('name', '!=', 'TRASH');
+                        })
+                        ->where('title', 'LIKE', "%%".$request->input('q')."%%")
+                        ->paginate(10);
 
         if ($projects->isEmpty()) {
             $projects = Project::with('client', 'paymentStatus', 'paymentMethod', 'projectStatus')
                     ->where('user_id', app('auth')->id())
+                    ->when($request->input('client_id'), function ($query) use ($request)
+                    {
+                        return $query->where('client_id', $request->input('client_id'));
+                    })
                     ->whereHas('client', function ($query) use ($request){
                         return $query->where('name', 'LIKE', "%%".$request->input('q')."%%");
+                    })
+                    ->whereHas('projectStatus', function ($query)
+                    {
+                        return $query->where('name', '!=', 'TRASH');
                     })
                     ->paginate(10);
         }
@@ -178,7 +198,50 @@ class ProjectController extends Controller
             'paymentMethod' => $paymentMethod->name
         ]);
     }
+    public function trash()
+    {
+        $projects = Project::with('client', 'projectStatus', 'paymentMethod', 'paymentStatus', 'payments')
+                        ->whereHas('projectStatus', function ($query)
+                        {
+                            return $query->where('name', 'TRASH');
+                        })
+                        ->where('user_id', app('auth')->id())->latest()->paginate(10);
 
+        return response()->json([
+            'projects' => $projects,
+            'message' => 'Success!'
+        ], 200);
+    }
+
+    public function trashSearch(Request $request)
+    {
+        $projects = Project::with('client', 'paymentStatus', 'paymentMethod', 'projectStatus')
+                    ->where('user_id', app('auth')->id())
+                    ->whereHas('projectStatus', function ($query)
+                    {
+                        return $query->where('name', 'TRASH');
+                    })
+                    ->where('title', 'LIKE', "%%".$request->input('q')."%%")
+                    ->paginate(10);
+
+        if ($projects->isEmpty()) {
+            $projects = Project::with('client', 'paymentStatus', 'paymentMethod', 'projectStatus')
+                    ->where('user_id', app('auth')->id())
+                    ->whereHas('client', function ($query) use ($request){
+                        return $query->where('name', 'LIKE', "%%".$request->input('q')."%%");
+                    })
+                    ->whereHas('projectStatus', function ($query)
+                    {
+                        return $query->where('name', 'TRASH');
+                    })
+                    ->paginate(10);
+        }
+
+        return response()->json([
+            'message' => 'Success!',
+            'projects' => $projects
+        ]);
+    }
     public function reminder()
     {
     }

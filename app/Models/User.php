@@ -41,6 +41,15 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
         return [];
     }
 
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
+    }
+
     public function profile()
     {
         return $this->hasOne(Profile::class, 'user_id');
