@@ -45,26 +45,28 @@ $router->group(['middleware' => 'auth:api', 'cors'], function($router)
         'uses' => 'ClientController@getAll'
     ]);
 
-    $router->get('/client/search', [
-        'uses' => 'ClientController@search'
-    ]);
+    $router->group(['prefix' => 'client'], function () use ($router)
+    {
+        $router->get('/search', [
+            'uses' => 'ClientController@search'
+        ]);
 
-    $router->put('/client/{client}/update', [
-        'uses' => 'ClientController@update'
-    ]);
+        $router->put('/{client}/update', [
+            'uses' => 'ClientController@update'
+        ]);
 
-    $router->get('/client/{client}/detail', [
-        'uses' => 'ClientController@detail'
-    ]);
+        $router->get('/{client}/detail', [
+            'uses' => 'ClientController@detail'
+        ]);
 
-    $router->delete('/client/{client}/delete', [
-        'uses' => 'ClientController@delete'
-    ]);
+        $router->delete('/{client}/delete', [
+            'uses' => 'ClientController@delete'
+        ]);
 
-    $router->post('/client/store', [
-        'uses' => 'ClientController@store'
-    ]);
-
+        $router->post('/store', [
+            'uses' => 'ClientController@store'
+        ]);
+    });
     /*client*/
 
     $router->get('/projects/{client}', [
@@ -75,41 +77,44 @@ $router->group(['middleware' => 'auth:api', 'cors'], function($router)
         'uses' => 'ProjectController@getAll'
     ]);
 
-    $router->get('/project/search', [
-        'uses' => 'ProjectController@search'
-    ]);
+    $router->group(['prefix' => 'project'], function () use ($router)
+    {
+        $router->get('/search', [
+            'uses' => 'ProjectController@search'
+        ]);
 
-    $router->put('/project/{project}/update', [
-        'uses' => 'ProjectController@update'
-    ]);
+        $router->put('/{project}/update', [
+            'uses' => 'ProjectController@update'
+        ]);
 
-    $router->get('/project/{project}/detail', [
-        'uses' => 'ProjectController@detail'
-    ]);
+        $router->get('/{project}/detail', [
+            'uses' => 'ProjectController@detail'
+        ]);
 
-    $router->delete('/project/{project}/delete', [
-        'uses' => 'ProjectController@delete'
-    ]);
+        $router->delete('/{project}/delete', [
+            'uses' => 'ProjectController@delete'
+        ]);
 
-    $router->post('/project/store', [
-        'uses' => 'ProjectController@store'
-    ]);
+        $router->post('/store', [
+            'uses' => 'ProjectController@store'
+        ]);
 
-    $router->put('/project/{project}/project_status/{project_status}', [
-        'uses' => 'ProjectController@updateProjectStatus'
-    ]);
+        $router->put('/{project}/project_status/{project_status}', [
+            'uses' => 'ProjectController@updateProjectStatus'
+        ]);
 
-    $router->put('/project/{project}/payment_status/{payment_status}', [
-        'uses' => 'ProjectController@updatePaymentStatus'
-    ]);
+        $router->put('/{project}/payment_status/{payment_status}', [
+            'uses' => 'ProjectController@updatePaymentStatus'
+        ]);
 
-    $router->put('/project/{project}/payment_method/{payment_method}', [
-        'uses' => 'ProjectController@updatePaymentMethod'
-    ]);
+        $router->put('/{project}/payment_method/{payment_method}', [
+            'uses' => 'ProjectController@updatePaymentMethod'
+        ]);
 
-    $router->get('/project/notification', [
-        'uses' => 'ProjectController@reminder'
-    ]);
+        $router->get('/notification', [
+            'uses' => 'ProjectController@reminder'
+        ]);
+    });
 
 
 /*project*/
@@ -122,25 +127,28 @@ $router->group(['middleware' => 'auth:api', 'cors'], function($router)
         'uses' => 'ProjectStatusController@getAll'
     ]);
 
-    $router->get('/project_status/search', [
-        'uses' => 'ProjectStatusController@search'
-    ]);
+    $router->group(['prefix' => 'project_status'], function () use ($router)
+    {
+        $router->get('/search', [
+            'uses' => 'ProjectStatusController@search'
+        ]);
 
-    $router->put('/project_status/{project_status}/update', [
-        'uses' => 'ProjectStatusController@update'
-    ]);
+        $router->put('/{project_status}/update', [
+            'uses' => 'ProjectStatusController@update'
+        ]);
 
-    $router->get('/project_status/{project_status}/detail', [
-        'uses' => 'ProjectStatusController@detail'
-    ]);
+        $router->get('/{project_status}/detail', [
+            'uses' => 'ProjectStatusController@detail'
+        ]);
 
-    $router->delete('/project_status/{project_status}/delete', [
-        'uses' => 'ProjectStatusController@delete'
-    ]);
+        $router->delete('/{project_status}/delete', [
+            'uses' => 'ProjectStatusController@delete'
+        ]);
 
-    $router->post('/project_status/store', [
-        'uses' => 'ProjectStatusController@store'
-    ]);
+        $router->post('/store', [
+            'uses' => 'ProjectStatusController@store'
+        ]);
+    });
 
 /*project status*/
 
@@ -152,29 +160,30 @@ $router->group(['middleware' => 'auth:api', 'cors'], function($router)
         'uses' => 'PaymentStatusController@getAll'
     ]);
 
-    $router->get('/payment_status/search', [
-        'uses' => 'PaymentStatusController@search'
-    ]);
+    $router->group(['prefix' => 'payment_status'], function () use ($router)
+    {
+        $router->get('/search', [
+            'uses' => 'PaymentStatusController@search'
+        ]);
 
-    $router->put('/payment_status/{payment_status}/update', [
-        'uses' => 'PaymentStatusController@update'
-    ]);
+        $router->put('/{payment_status}/update', [
+            'uses' => 'PaymentStatusController@update'
+        ]);
 
-    $router->get('/payment_status/{payment_status}/detail', [
-        'uses' => 'PaymentStatusController@detail'
-    ]);
+        $router->get('/{payment_status}/detail', [
+            'uses' => 'PaymentStatusController@detail'
+        ]);
 
-    $router->delete('/payment_status/{payment_status}/delete', [
-        'uses' => 'PaymentStatusController@delete'
-    ]);
+        $router->delete('/{payment_status}/delete', [
+            'uses' => 'PaymentStatusController@delete'
+        ]);
 
-    $router->post('/payment_status/store', [
-        'uses' => 'PaymentStatusController@store'
-    ]);
+        $router->post('/store', [
+            'uses' => 'PaymentStatusController@store'
+        ]);
+    });
 
     /*payment status*/
-
-
     $router->get('/payment_methods', [
         'uses' => 'PaymentMethodController@index'
     ]);
@@ -183,32 +192,70 @@ $router->group(['middleware' => 'auth:api', 'cors'], function($router)
         'uses' => 'PaymentMethodController@getAll'
     ]);
 
-    $router->get('/payment_method/search', [
-        'uses' => 'PaymentMethodController@search'
-    ]);
+    $router->group(['prefix' => 'payment_method'], function () use ($router)
+    {
+        $router->get('/search', [
+            'uses' => 'PaymentMethodController@search'
+        ]);
 
-    $router->put('/payment_method/{payment_method}/update', [
-        'uses' => 'PaymentMethodController@update'
-    ]);
+        $router->put('/{payment_method}/update', [
+            'uses' => 'PaymentMethodController@update'
+        ]);
 
-    $router->get('/payment_method/{payment_method}/detail', [
-        'uses' => 'PaymentMethodController@detail'
-    ]);
+        $router->get('/{payment_method}/detail', [
+            'uses' => 'PaymentMethodController@detail'
+        ]);
 
-    $router->delete('/payment_method/{payment_method}/delete', [
-        'uses' => 'PaymentMethodController@delete'
-    ]);
+        $router->delete('/{payment_method}/delete', [
+            'uses' => 'PaymentMethodController@delete'
+        ]);
 
-    $router->post('/payment_method/store', [
-        'uses' => 'PaymentMethodController@store'
-    ]);
+        $router->post('/store', [
+            'uses' => 'PaymentMethodController@store'
+        ]);
+    });
 
 /*Profile */
-    $router->get('/profile/{user}/detail', [
-        'uses' => 'ProfileController@index'
+    $router->group(['prefix' => 'profile'], function () use ($router)
+    {
+        $router->get('/{user}/detail', [
+            'uses' => 'ProfileController@index'
+        ]);
+
+        $router->put('/{user}/update', [
+            'uses' => 'ProfileController@update'
+        ]);
+    });
+
+    $router->get('/payments', [
+        'uses' => 'PaymentController@index'
     ]);
 
-    $router->put('/profile/{user}/update', [
-        'uses' => 'ProfileController@update'
+    $router->get('/payments/all', [
+        'uses' => 'PaymentController@getAll'
     ]);
+
+
+    $router->group(['prefix' => 'payment'], function () use ($router)
+    {
+        $router->get('/search', [
+            'uses' => 'PaymentController@search'
+        ]);
+
+        $router->put('/{payment}/update', [
+            'uses' => 'PaymentController@update'
+        ]);
+
+        $router->get('/{payment}/detail', [
+            'uses' => 'PaymentController@detail'
+        ]);
+
+        $router->delete('/{payment}/delete', [
+            'uses' => 'PaymentController@delete'
+        ]);
+
+        $router->post('/store', [
+            'uses' => 'PaymentController@store'
+        ]);
+    });
 });

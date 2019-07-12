@@ -46,4 +46,9 @@ class Project extends Model
     {
         return $this->belongsTo(PaymentStatus::class, 'payment_status_id');
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

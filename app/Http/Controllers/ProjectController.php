@@ -39,7 +39,12 @@ class ProjectController extends Controller
 
     public function detail($project)
     {
-        $project = Project::with('client', 'paymentStatus', 'paymentMethod', 'projectStatus')->find($project);
+        $project = Project::with(
+                'client',
+                'paymentStatus',
+                'paymentMethod',
+                'projectStatus',
+                'payments')->find($project);
 
         return response()->json([
             'message' => 'Success!',
