@@ -242,7 +242,84 @@ class ProjectController extends Controller
             'projects' => $projects
         ]);
     }
+
+    public function projectStatus(Request $request)
+    {
+        /*
+        * id = [1, 4, 6,7]
+        */
+        $projects = Project::with('client', 'paymentStatus', 'paymentMethod', 'projectStatus', 'payments')
+                        ->where('user_id', app('auth')->id())
+                        ->where('project_status_id', $request->input('project_status_id'))
+                        ->latest()->get();
+
+        return response()->json([
+            'projects' => $projects,
+            'message' => 'Success!'
+        ], 200);
+    }
+
+    public function incomeByProject(Request $request)
+    {
+        $query = "select sum(amount) as total_amount from  payments as pay join projects as proj
+        on pay.project_id = proj.id join project_status
+        on project_status.id = proj.project_status_id where proj.payment_status_id = 2
+        and project_status_id = 7 and proj.user_id = " . app('auth')->id().
+        " and pay.created_at LIKE '" .Carbon::now()->format('Y-m') ."%%'";
+        $amount = app('db')->select($query);
+
+        return response()->json([
+            'amount' => $amount,
+            'message' => 'Success!'
+        ], 200);
+    }
+
+    public function bestFiveProject()
+    {
+        $date = Carbon::now()->format('Y-m');
+        $query = "select * from projects as proj JOin payment_status as ps
+        on ps.id = proj.payment_status_id join payments as pay
+        on proj.id = pay.project_id where proj.payment_status_id = 2
+        and proj.deadline like '". $date ."%%' and proj.project_status_id != 9 order by pay.amount desc limit 5;";
+        $projects = Project::where('user_id', app('auth')->id())
+                            ->with('payments')
+                            ->where('payment_status_id', 2)
+                            ->where('deadline', 'LIKE', $date.'%%')
+                            ->where('project_status_id', '!=', 9)
+                            ->whereHas('payments', function ($query)
+                            {
+                                return $query->orderBy('amount', 'desc');
+                            })
+                            ->get();
+
+        return response()->json([
+            'projects' => $projects,
+            'message' => 'Success!'
+        ], 200);
+    }
+
+    public function projectNearDeadline(Request $request)
+    {
+        $projects = Project::with('paymentStatus', 'client')
+                            ->where('deadline', '>' , Carbon::now()->format('Y-m-d'))
+                            ->where('payment_status_id', '!=', 2)
+                            ->where('project_status_id', '!=', 9)
+                            ->where('project_status_id', '!=', 8)
+                            ->where('project_status_id', '!=', 7)
+                            ->orderBy('deadline', 'asc')
+                            ->when($request->input('limit'), function ($query) use ($request)
+                            {
+                                return $query->limit($request->input('limit'));
+                            })->get();
+
+        return response()->json([
+            'projects' => $projects,
+            'message' => 'success'
+        ]);
+    }
+
     public function reminder()
     {
+
     }
 }

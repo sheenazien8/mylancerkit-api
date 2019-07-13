@@ -83,6 +83,22 @@ $router->group(['middleware' => 'auth:api', 'cors'], function($router)
             'uses' => 'ProjectController@trash'
         ]);
 
+        $router->get('/status', [
+            'uses' => 'ProjectController@projectStatus'
+        ]);
+
+        $router->get('/deadline', [
+            'uses' => 'ProjectController@projectNearDeadline'
+        ]);
+
+        $router->get('/income', [
+            'uses' => 'ProjectController@incomeByProject'
+        ]);
+
+        $router->get('/bestfive', [
+            'uses' => 'ProjectController@bestFiveProject'
+        ]);
+
         $router->get('/search', [
             'uses' => 'ProjectController@search'
         ]);
