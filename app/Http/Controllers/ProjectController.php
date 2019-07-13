@@ -307,6 +307,7 @@ class ProjectController extends Controller
                             ->where('project_status_id', '!=', 8)
                             ->where('project_status_id', '!=', 7)
                             ->orderBy('deadline', 'asc')
+                            ->where('user_id', app('auth')->id())
                             ->when($request->input('limit'), function ($query) use ($request)
                             {
                                 return $query->limit($request->input('limit'));
