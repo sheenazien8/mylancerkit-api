@@ -198,20 +198,6 @@ class ProjectController extends Controller
             'paymentMethod' => $paymentMethod->name
         ]);
     }
-    public function trash()
-    {
-        $projects = Project::with('client', 'projectStatus', 'paymentMethod', 'paymentStatus', 'payments')
-                        ->whereHas('projectStatus', function ($query)
-                        {
-                            return $query->where('name', 'TRASH');
-                        })
-                        ->where('user_id', app('auth')->id())->latest()->paginate(10);
-
-        return response()->json([
-            'projects' => $projects,
-            'message' => 'Success!'
-        ], 200);
-    }
 
     public function trashSearch(Request $request)
     {
@@ -245,13 +231,17 @@ class ProjectController extends Controller
 
     public function projectStatus(Request $request)
     {
-        /*
-        * id = [1, 4, 6,7]
-        */
         $projects = Project::with('client', 'paymentStatus', 'paymentMethod', 'projectStatus', 'payments')
                         ->where('user_id', app('auth')->id())
-                        ->where('project_status_id', $request->input('project_status_id'))
-                        ->latest()->get();
+                        ->when($request->input('project_status_id'), function ($q) use ($request)
+                        {
+                            return $q->where('project_status_id', $request->input('project_status_id'));
+                        });
+        if ($request->input('paginate')) {
+            $projects = $projects->latest()->paginate(10);
+        }else {
+            $projects = $projects->latest()->get();
+        }
 
         return response()->json([
             'projects' => $projects,

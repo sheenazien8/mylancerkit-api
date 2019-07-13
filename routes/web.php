@@ -79,10 +79,6 @@ $router->group(['middleware' => 'auth:api', 'cors'], function($router)
 
     $router->group(['prefix' => 'project'], function () use ($router)
     {
-        $router->get('/trash', [
-            'uses' => 'ProjectController@trash'
-        ]);
-
         $router->get('/status', [
             'uses' => 'ProjectController@projectStatus'
         ]);
