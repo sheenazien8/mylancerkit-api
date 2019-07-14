@@ -10,6 +10,7 @@
         "illuminate/mail": "^5.8",
         "illuminate/notifications": "^5.5",
         "illuminate/support": "^5.5",
+        "intervention/image": "^2.5",
         "laravel/lumen-framework": "5.8.*",
         "nesbot/carbon": "1.36.2",
         "ramsey/uuid": "^3.8",

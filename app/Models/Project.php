@@ -18,6 +18,7 @@ class Project extends Model
         'title',
         'brief',
         'reffile_image',
+        'image_name',
         'file_location',
         'deadline',
     ];

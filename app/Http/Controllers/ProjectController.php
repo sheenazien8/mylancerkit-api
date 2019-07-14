@@ -8,9 +8,11 @@ use App\Models\PaymentStatus;
 use App\Models\Project;
 use App\Models\ProjectStatus;
 use App\Notifications\ReminderNotifications;
-use Illuminate\Support\Facades\Notification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Notification;
+use Intervention\Image\Facades\Image;
 
 class ProjectController extends Controller
 {
@@ -55,9 +57,51 @@ class ProjectController extends Controller
             'project' => $project,
         ], 200);
     }
+    public $path;
+    public $dimensions;
 
+    public function __construct()
+    {
+        //DEFINISIKAN PATH
+        $this->path = storage_path('app/public/images');
+        //DEFINISIKAN DIMENSI
+        $this->dimensions = ['245', '300', '500'];
+    }
+    private function uploadFile($file, $fileExists = null)
+    {
+        if(File::exists($this->path.'/'.$fileExists)){
+            File::delete($this->path.'/'.$fileExists);
+            foreach ($this->dimensions as $row) {
+                File::delete($this->path . '/' . $row . '/' . $fileExists);
+            }
+        }
+        if (!File::isDirectory($this->path)) {
+            File::makeDirectory($this->path, 0777, true);
+        }
+        $fileName = null;
+        if ($file) {
+            $fileName = Carbon::now()->timestamp . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            Image::make($file)->save($this->path . '/' . $fileName);
+            foreach ($this->dimensions as $row) {
+                $canvas = Image::canvas($row, $row);
+                $resizeImage  = Image::make($file)->resize($row, $row, function($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                if (!File::isDirectory($this->path . '/' . $row)) {
+                    File::makeDirectory($this->path . '/' . $row);
+                }
+                $canvas->insert($resizeImage, 'center');
+                $canvas->save($this->path . '/' . $row . '/' . $fileName);
+            }
+        }
+
+        return $fileName;
+    }
     public function store(Request $request)
     {
+        $uploadedFile = $request->file('image');
+        $filename = $this->uploadFile($uploadedFile);
         $request->deadline = Carbon::parse($request->deadline)->format('Y-m-d');
         $this->validate($request, [
             'title' => 'required',
@@ -65,6 +109,10 @@ class ProjectController extends Controller
             'brief' => 'required',
             'file_location' => 'required',
             'deadline' => 'required'
+        ]);
+        $request->request->add([
+            'reffile_image' => $filename,
+            'image_name' => $this->path.'/'
         ]);
         $paymentStatus = PaymentStatus::find($request->payment_status_id);
         $paymentMethod = PaymentMethod::find($request->payment_method_id);
@@ -82,8 +130,10 @@ class ProjectController extends Controller
 
     public function update(Request $request, $project)
     {
-        $request->deadline = Carbon::parse($request->deadline)->format('Y-m-d');
         $project = Project::find($project);
+        $uploadedFile = $request->file('image');
+        $filename = $this->uploadFile($uploadedFile, $project->reffile_image);
+        $request->deadline = Carbon::parse($request->deadline)->format('Y-m-d');
         $this->validate($request, [
             'title' => 'required',
             'client_id' => 'required',
@@ -91,7 +141,11 @@ class ProjectController extends Controller
             'file_location' => 'required',
             'deadline' => 'required'
         ]);
-        $projectStatus = $project->project_status_id;
+        $request->request->add([
+            'reffile_image' => $filename,
+            'image_name' => $this->path.'/'
+        ]);
+        $projectStatus = ProjectStatus::find($request->project_status_id);
         $paymentStatus = PaymentStatus::find($request->payment_status_id);
         $paymentMethod = PaymentMethod::find($request->payment_method_id);
         $client = Client::find($request->client_id);
