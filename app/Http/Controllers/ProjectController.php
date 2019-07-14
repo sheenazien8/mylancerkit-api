@@ -145,7 +145,7 @@ class ProjectController extends Controller
             'reffile_image' => $filename,
             'image_name' => $this->path.'/'
         ]);
-        $projectStatus = ProjectStatus::find($request->project_status_id);
+        $projectStatus = $project->project_status_id;
         $paymentStatus = PaymentStatus::find($request->payment_status_id);
         $paymentMethod = PaymentMethod::find($request->payment_method_id);
         $client = Client::find($request->client_id);
