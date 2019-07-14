@@ -233,14 +233,28 @@ class ProjectController extends Controller
     {
         $projects = Project::with('client', 'paymentStatus', 'paymentMethod', 'projectStatus', 'payments')
                         ->where('user_id', app('auth')->id())
+                        ->when($request->input('client_id'), function ($q) use ($request)
+                        {
+                            $q->where('client_id', $request->input('client_id'));
+                        })
                         ->when($request->input('project_status_id'), function ($q) use ($request)
                         {
-                            return $q->where('project_status_id', $request->input('project_status_id'));
+                            $q->where('project_status_id', $request->input('project_status_id'));
                         });
         if ($request->input('paginate')) {
-            $projects = $projects->latest()->paginate(10);
+            if ($request->input('orderBy')) {
+                $projects = $projects->orderBy('id', $request->input('orderBy'));
+            }else {
+                $projects = $projects->latest();
+            }
+            $projects = $projects->paginate(10);
         }else {
-            $projects = $projects->latest()->get();
+            if ($request->input('orderBy')) {
+                $projects = $projects->orderBy('id', $request->input('orderBy'));
+            }else {
+                $projects = $projects->latest();
+            }
+            $projects = $projects->get();
         }
 
         return response()->json([
