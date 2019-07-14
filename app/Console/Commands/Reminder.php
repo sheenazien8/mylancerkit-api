@@ -39,7 +39,7 @@ class Reminder extends Command
     */
    public function handle()
    {
-      $users = User::where('id', 2)->with(['projects' => function ($query)
+      $users = User::where('status', true)->with(['projects' => function ($query)
       {
           $query->orderBy('deadline', 'asc')
                     ->where('deadline', '>' , Carbon::now()->format('Y-m-d'))
