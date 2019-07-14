@@ -17,6 +17,7 @@ class Project extends Model
         'payment_status_id',
         'title',
         'brief',
+        'reffile_image',
         'file_location',
         'deadline',
     ];

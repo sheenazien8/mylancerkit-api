@@ -306,10 +306,7 @@ class ProjectController extends Controller
     {
         $projects = Project::with('paymentStatus', 'client')
                             ->where('deadline', '>' , Carbon::now()->format('Y-m-d'))
-                            ->where('payment_status_id', '!=', 2)
-                            ->where('project_status_id', '!=', 9)
-                            ->where('project_status_id', '!=', 8)
-                            ->where('project_status_id', '!=', 7)
+                            ->whereIn('project_status_id', [1,2,3,4])
                             ->orderBy('deadline', 'asc')
                             ->where('user_id', app('auth')->id())
                             ->when($request->input('limit'), function ($query) use ($request)
