@@ -100,9 +100,6 @@ class ProjectController extends Controller
     }
     public function store(Request $request)
     {
-        $uploadedFile = $request->file('image');
-        // dd($uploadedFile, $request->all());
-        $filename = $this->uploadFile($uploadedFile);
         $request->deadline = Carbon::parse($request->deadline)->format('Y-m-d');
         $this->validate($request, [
             'title' => 'required',
@@ -111,10 +108,10 @@ class ProjectController extends Controller
             'file_location' => 'required',
             'deadline' => 'required'
         ]);
-        $request->request->add([
-            'reffile_image' => $filename,
-            'image_name' => $this->path.'/'
-        ]);
+        // $request->request->add([
+        //     'reffile_image' => $filename,
+        //     'image_name' => $this->path.'/'
+        // ]);
         $paymentStatus = PaymentStatus::find($request->payment_status_id);
         $paymentMethod = PaymentMethod::find($request->payment_method_id);
         $project = new Project();
@@ -132,8 +129,6 @@ class ProjectController extends Controller
     public function update(Request $request, $project)
     {
         $project = Project::find($project);
-        $uploadedFile = $request->file('image');
-        $filename = $this->uploadFile($uploadedFile, $project->reffile_image);
         $request->deadline = Carbon::parse($request->deadline)->format('Y-m-d');
         $this->validate($request, [
             'title' => 'required',
@@ -142,10 +137,10 @@ class ProjectController extends Controller
             'file_location' => 'required',
             'deadline' => 'required'
         ]);
-        $request->request->add([
-            'reffile_image' => $filename,
-            'image_name' => $this->path.'/'
-        ]);
+        // $request->request->add([
+        //     'reffile_image' => $filename,
+        //     'image_name' => $this->path.'/'
+        // ]);
         $projectStatus = $project->project_status_id;
         $paymentStatus = PaymentStatus::find($request->payment_status_id);
         $paymentMethod = PaymentMethod::find($request->payment_method_id);

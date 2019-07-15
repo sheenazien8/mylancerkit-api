@@ -14,7 +14,7 @@ class AddReffileColumnToProjectsTable extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->string('reffile_image')->nullable()->after('brief');
+            $table->longText('reffile_image')->nullable()->after('brief');
             $table->string('image_name')->nullable()->after('reffile_image');
         });
     }
