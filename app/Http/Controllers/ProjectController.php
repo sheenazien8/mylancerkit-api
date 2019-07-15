@@ -101,6 +101,7 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $uploadedFile = $request->file('image');
+        // dd($uploadedFile, $request->all());
         $filename = $this->uploadFile($uploadedFile);
         $request->deadline = Carbon::parse($request->deadline)->format('Y-m-d');
         $this->validate($request, [

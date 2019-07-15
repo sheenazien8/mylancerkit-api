@@ -44,7 +44,7 @@ class Reminder extends Command
           $query->orderBy('deadline', 'asc')
                     ->where('deadline', '>' , Carbon::now()->format('Y-m-d'))
                     ->whereIn('payment_status_id', [1,2,3,4]);
-                }])->latest()->limit(5)->get();
+                }])->latest()->get();
       foreach ($users as $user) {
         foreach ($user->projects as $project) {
             if ($project->deadline == Carbon::now()->subDays(-2)->format('Y-m-d') ||
