@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Wellcome To Freelance Toolkit</title>
+    <title>Wellcome To Mylancerkit</title>
     <link href="https://fonts.googleapis.com/css?family=Nunito|Roboto&display=swap" rel="stylesheet">
     <style>
         body {
@@ -60,7 +60,7 @@
         </div>
         <div class="container">
             <h2 class="header">Email Confirmation</h2>
-            <p >Hei {{ $user->name }} Wellcome to Freelancetoolkit. you're almost ready to start enjoying Freelancetoolit.</p>
+            <p >Hei {{ $user->name }} Wellcome to Mylancerkit. you're almost ready to start enjoying Mylancerkit.</p>
             <p class="sentece">Simply click the big yellow button below to verify your account.</p>
         </div>
         <div class="container">
