@@ -38,7 +38,6 @@
             /*width: 100%;*/
             height: 35em;
             border-radius: 5px 5px 0px 0px;
-            background-image: url('../background-image/2480553.jpg');
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -55,7 +54,7 @@
 </head>
 <body>
     <div class="wrap">
-        <div class="hero">
+        <div class="hero" style="background-image: url({{ env('APP_IMAGE_URL').'/background-image/2480553.jpg' }})">
 
         </div>
         <div class="container">
