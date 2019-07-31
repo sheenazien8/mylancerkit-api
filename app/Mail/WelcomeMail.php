@@ -29,6 +29,7 @@ class WelcomeMail extends Mailable
      */
     public function build()
     {
+        // dd($this->attach(env('APP_IMAGE_URL').'/background-image/2480553.jpg'), storage_path('background-image/2480553.jpg'));
         return $this->from(env('MAIL_USERNAME'))
                     ->view('emails.wellcome');
     }

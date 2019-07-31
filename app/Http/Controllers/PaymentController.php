@@ -31,6 +31,7 @@ class PaymentController extends Controller
             'message' => 'Success!'
         ], 200);
     }
+
     public function detail($payment)
     {
         $payment = Payment::with('project')->find($payment);

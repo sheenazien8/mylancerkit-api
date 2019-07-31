@@ -94,3 +94,11 @@ class ClientController extends Controller
         ]);
     }
 }
+
+    public function client()
+    {
+        $client = new Client();
+        $response = $client->request('GET', 'https://quotes.rest/qod.json');
+
+        return response()->json(json_decode($response->getBody())->contents);
+    }

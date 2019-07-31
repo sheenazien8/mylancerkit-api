@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'App\Console\Commands\Reminder'
+        'App\Console\Commands\Reminder',
+        'App\Console\Commands\InsertQuote'
     ];
 
     /**
@@ -26,6 +27,9 @@ class Kernel extends ConsoleKernel
     {
        $schedule->command('daily:reminder')
                 ->twiceDaily(8, 16);
+       $schedule->command('command:insert_quote')
+                ->hourly();
+
     }
 
     protected function commands()

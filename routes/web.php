@@ -11,6 +11,7 @@ $router->get('/', function () use ($router) {
 
         return $randomString;
     }
+
     return generateRandomString();
 });
 
@@ -255,7 +256,7 @@ $router->group(['middleware' => 'auth:api', 'cors'], function($router)
         'uses' => 'PaymentController@getAll'
     ]);
 
-
+// payment
     $router->group(['prefix' => 'payment'], function () use ($router)
     {
         $router->get('/search', [
@@ -278,4 +279,36 @@ $router->group(['middleware' => 'auth:api', 'cors'], function($router)
             'uses' => 'PaymentController@store'
         ]);
     });
+
+    // invoice
+    $router->group(['prefix' => 'invoice'], function () use ($router){
+        $router->get('/', 'InvoiceController@invoice');
+    });
+
+    //quote
+    $router->get('/quotes', 'QuoteController@index');
+
+    $router->group(['prefix' => 'quote'], function () use ($router){
+        $router->get('/search', [
+            'uses' => 'QuoteController@search'
+        ]);
+
+        $router->put('/{quote}/update', [
+            'uses' => 'QuoteController@update'
+        ]);
+
+        $router->get('/{quote}/detail', [
+            'uses' => 'QuoteController@detail'
+        ]);
+
+        $router->delete('/{quote}/delete', [
+            'uses' => 'QuoteController@delete'
+        ]);
+
+        $router->post('/store', [
+            'uses' => 'QuoteController@store'
+        ]);
+
+    });
+
 });

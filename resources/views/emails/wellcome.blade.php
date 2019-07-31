@@ -55,7 +55,6 @@
 <body>
     <div class="wrap">
         <div class="hero" style="background-image: url({{ env('APP_IMAGE_URL').'/background-image/2480553.jpg' }})">
-
         </div>
         <div class="container">
             <h2 class="header">Email Confirmation</h2>

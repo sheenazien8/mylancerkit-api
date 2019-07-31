@@ -88,11 +88,11 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = app('hash')->make($request->password);
         $user->verification_code =$this->generateRandomString();
-        $user->save();
+        // $user->save();
 
         $profile = new Profile();
         $profile->user()->associate($user);
-        $profile->save();
+        // $profile->save();
 
         Mail::to($user->email)->send(new WelcomeMail($user));
 
