@@ -13,15 +13,17 @@ class ReminderMail extends Mailable
 
     public $user;
     public $projects;
+    public $pastDue;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $projects)
+    public function __construct($user, $projects, $pastDue = null)
     {
         $this->user = $user;
         $this->projects = $projects;
+        $this->pastDue = $pastDue;
     }
 
     /**

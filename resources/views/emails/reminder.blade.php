@@ -31,7 +31,7 @@
 </head>
 <body>
     <h1 align="center">Reminder Deadline</h1>
-    <p>Pagi {{ $user->name }}, semoga sehat selalu, berdoa dulu sebelum mengerjakan projectmu dan jangan lupa bersyukur</p>
+    <p>Hay, {{ $user->name }}, semoga sehat selalu, berdoa dulu sebelum mengerjakan projectmu dan jangan lupa bersyukur</p>
 
     <div id="projects">
         <h3>Ini daftar Pekerjaanmu yang sedang mendekati deadline</h3>
@@ -55,27 +55,29 @@
                 @endforeach
             </tbody>
         </table>
-        <h3>Ini daftar Pekerjaanmu yang sudah melewati deadline</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Client</th>
-                    <th>Project Progress</th>
-                    <th>Deadline</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($projects as $project)
+        @if ($pastDue)
+            <h3>Ini daftar Pekerjaanmu yang sudah melewati deadline</h3>
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ $project->title }}</td>
-                        <td>{{ $project->client->name }}</td>
-                        <td>{{ $project->projectStatus->name }}</td>
-                        <td>{{ $project->deadline }}</td>
+                        <th>Title</th>
+                        <th>Client</th>
+                        <th>Project Progress</th>
+                        <th>Deadline</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($pastDue as $project)
+                        <tr>
+                            <td>{{ $project->title }}</td>
+                            <td>{{ $project->client->name }}</td>
+                            <td>{{ $project->projectStatus->name }}</td>
+                            <td>{{ $project->deadline }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
         <p>Semoga kamu bisa deliver pekerjaan ke client tepat waktu :D</p>
     </div>
 </body>

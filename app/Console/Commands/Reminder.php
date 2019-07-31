@@ -57,13 +57,10 @@ class Reminder extends Command
                 $reminder->push($project);
                 $sentReminder = true;
             }
-            if ($project->deadline > Carbon::now()->format('Y-m-d')) {
-                dump($project);
-            }
         }
         if ($sentReminder) {
             $this->info('Reminder messages sent successfully to ' . $user->email. '!!!');
-            // Mail::to($user->email)->send(new ReminderMail($user, $reminder));
+            Mail::to($user->email)->send(new ReminderMail($user, $reminder));
         }
       }
    }
