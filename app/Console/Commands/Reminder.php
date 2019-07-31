@@ -42,17 +42,28 @@ class Reminder extends Command
       $users = User::where('status', true)->with(['projects' => function ($query)
       {
           $query->orderBy('deadline', 'asc')
-                    ->where('deadline', '>' , Carbon::now()->format('Y-m-d'))
-                    ->whereIn('payment_status_id', [1,2,3,4]);
-                }])->latest()->get();
+                    ->where('deadline', '>=' , Carbon::now()->format('Y-m-d'))
+                    ->whereIn('project_status_id', [1,2,3,4])
+                    ->where('payment_status_id', 1);
+    }])->latest()->get();
+      // dd($users->first()->projects);
+      $reminder = collect();
       foreach ($users as $user) {
+        $sentReminder = false;
         foreach ($user->projects as $project) {
             if ($project->deadline == Carbon::now()->subDays(-2)->format('Y-m-d') ||
                 $project->deadline == Carbon::now()->subDays(-1)->format('Y-m-d') ||
                 $project->deadline == Carbon::now()->format('Y-m-d')) {
-                $this->info('Reminder messages sent successfully to ' . $user->email. '!!!');
-                Mail::to($user->email)->send(new ReminderMail($user));
+                $reminder->push($project);
+                $sentReminder = true;
             }
+            if ($project->deadline > Carbon::now()->format('Y-m-d')) {
+                dump($project);
+            }
+        }
+        if ($sentReminder) {
+            $this->info('Reminder messages sent successfully to ' . $user->email. '!!!');
+            // Mail::to($user->email)->send(new ReminderMail($user, $reminder));
         }
       }
    }

@@ -12,7 +12,7 @@ $router->get('/', function () use ($router) {
         return $randomString;
     }
 
-    return generateRandomString();
+    return view('emails.reminder');
 });
 
 

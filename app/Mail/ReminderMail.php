@@ -12,14 +12,16 @@ class ReminderMail extends Mailable
 
 
     public $user;
+    public $projects;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($user, $projects)
     {
         $this->user = $user;
+        $this->projects = $projects;
     }
 
     /**
@@ -29,6 +31,7 @@ class ReminderMail extends Mailable
      */
     public function build()
     {
+        // dd($this->projects);
         return $this->from(env('MAIL_USERNAME'))
                     ->view('emails.reminder');
     }
