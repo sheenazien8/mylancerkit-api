@@ -93,7 +93,6 @@ class ClientController extends Controller
             'clients' => $clients
         ]);
     }
-}
 
     public function client()
     {
@@ -102,3 +101,4 @@ class ClientController extends Controller
 
         return response()->json(json_decode($response->getBody())->contents);
     }
+}
